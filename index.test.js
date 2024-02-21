@@ -175,6 +175,42 @@ describe("tests for /fruits", () => {
     );
   });
 
+  test("POST returns error obj when name field is empty", async () => {
+    const response = await request(app).post("/fruits").send({
+      name: "",
+      color: "red",
+    });
+
+    expect(response.body.error).toEqual(
+      expect.arrayContaining([
+        {
+          value: "",
+          msg: "Invalid value",
+          param: "name",
+          location: "body",
+        },
+      ])
+    );
+  });
+
+  test("POST returns error obj when color field is empty", async () => {
+    const response = await request(app).post("/fruits").send({
+      name: "Mango",
+      color: "",
+    });
+
+    expect(response.body.error).toEqual(
+      expect.arrayContaining([
+        {
+          value: "",
+          msg: "Invalid value",
+          param: "color",
+          location: "body",
+        },
+      ])
+    );
+  });
+
   test("PUT /fruits/:id", async () => {
     const response = await request(app)
       .put("/fruits/1")
