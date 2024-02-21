@@ -68,6 +68,42 @@ describe("tests for /users", () => {
     );
   });
 
+  test("POST returns error obj when name field is empty", async () => {
+    const response = await request(app).post("/users").send({
+      name: "",
+      age: "location",
+    });
+
+    expect(response.body.error).toEqual(
+      expect.arrayContaining([
+        {
+          value: "",
+          msg: "Invalid value",
+          param: "name",
+          location: "body",
+        },
+      ])
+    );
+  });
+
+  test("POST returns error obj when age field is empty", async () => {
+    const response = await request(app).post("/users").send({
+      name: "Test",
+      age: "",
+    });
+
+    expect(response.body.error).toEqual(
+      expect.arrayContaining([
+        {
+          value: "",
+          msg: "Invalid value",
+          param: "age",
+          location: "body",
+        },
+      ])
+    );
+  });
+
   test("PUT /users/:id", async () => {
     const response = await request(app)
       .put("/users/1")
